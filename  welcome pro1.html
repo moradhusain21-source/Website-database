@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Visibility XML Satellite Dialog</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* --- Native Material 3 Core Variables --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --xml-main-bg: #0b0d19;
+            --xml-surface: #131726;
+            --xml-stroke-unselected: #22293f;
+            --xml-stroke-selected: #00f2fe;
+            
+            /* High-Visibility Fixing Colors */
+            --icon-active: #00f2fe;
+            --icon-inactive: #8ea1bc; /* কালো ভাব দূর করার জন্য উজ্জ্বল সিলভার-গ্রে */
+            --text-active: #ffffff;
+            --text-inactive: #94a3b8;
+            
+            --neon-purple: #8b5cf6;
+            --text-muted-tag: #475569;
+            
+            /* কোণাগুলোর রাউন্ড আপনার কথা মতো আরও কিছুটা কমিয়ে শার্প করা হলো */
+            --radius-dialog: 8px;
+            --radius-widgets: 5px;
+        }
+
+        body {
+            background-color: var(--xml-main-bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 16px;
+            position: relative;
+        }
+
+        /* Technical Grid Line Background Visuals */
+        .blueprint-grid {
+            position: absolute;
+            width: 100%; height: 100%;
+            top: 0; left: 0; z-index: 1;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 25px 25px;
+            pointer-events: none;
+        }
+
+        /* --- Master Panel Dimmer Mask --- */
+        .mask-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 4, 8, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        /* --- Native High-End Dialog Body --- */
+        .native-xml-frame {
+            background: var(--xml-surface);
+            border: 1px solid var(--xml-stroke-unselected);
+            width: 100%;
+            max-width: 370px;
+            border-radius: var(--radius-dialog);
+            padding: 24px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 35px 80px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.04);
+            animation: nativePop 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes nativePop {
+            0% { transform: scale(0.97); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- Header Segment Layout --- */
+        .header-layout-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            border-bottom: 1px solid var(--xml-stroke-unselected);
+            padding-bottom: 16px;
+        }
+
+        .sharp-icon-container {
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 242, 254, 0.03);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: var(--radius-widgets);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--icon-active);
+            flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.08);
+        }
+
+        .header-text-group { flex: 1; }
+        
+        .header-main-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+        }
+
+        /* Developer Name RGB Infinitum Shift */
+        .dev-badge-animated {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ff007f, #00f2fe, #8b5cf6, #ff007f);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgbShift 3.5s linear infinite;
+        }
+
+        @keyframes rgbShift {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .xml-section-headline {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted-tag);
+            letter-spacing: 1.2px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        /* --- Unselected High Visibility Grid Setup --- */
+        .grid-infrastructure {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .grid-component-cell {
+            background: #191e31;
+            border: 1px solid var(--xml-stroke-unselected);
+            border-radius: var(--radius-widgets);
+            padding: 14px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* আনসিলেক্টেড আইকন এখন একদম স্পষ্ট ও সুন্দর দেখাবে */
+        .grid-component-cell i, .grid-component-cell svg {
+            color: var(--icon-inactive);
+            margin-bottom: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .grid-component-cell span {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-inactive);
+            transition: color 0.2s ease;
+        }
+
+        /* Active Selected State Core Overrides */
+        .grid-component-cell.active {
+            background: rgba(0, 242, 254, 0.04);
+            border-color: var(--xml-stroke-selected);
+            box-shadow: inset 0 0 6px rgba(0, 242, 254, 0.05);
+        }
+        .grid-component-cell.active i, .grid-component-cell.active svg { color: var(--icon-active); }
+        .grid-component-cell.active span { color: var(--text-active); }
+
+        /* --- Enhanced High Contrast Living Switches --- */
+        .parameter-bounding-box {
+            background: #191e31;
+            border: 1px solid var(--xml-stroke-unselected);
+            border-radius: var(--radius-widgets);
+            padding: 12px 14px;
+            margin-bottom: 24px;
+        }
+
+        .switch-flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .switch-flex-row:first-child {
+            border-bottom: 1px solid var(--xml-stroke-unselected);
+            padding-bottom: 12px;
+            margin-bottom: 8px;
+        }
+
+        .switch-label-string {
+            font-size: 13px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* High Visibility Sharp Toggle Track Layout */
+        .native-toggle-wrap {
+            position: relative;
+            width: 40px; height: 20px;
+        }
+        .native-toggle-wrap input { opacity: 0; width: 0; height: 0; }
+
+        .native-track {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #272f4d; /* অফ থাকলে উজ্জ্বল স্লেট কালার যাতে চোখে পড়ে */
+            border: 1px solid #364166;
+            border-radius: var(--radius-widgets);
+            transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .native-track::before {
+            content: "";
+            position: absolute;
+            height: 12px; width: 12px;
+            left: 3px; bottom: 3px;
+            background-color: #cbd5e1;
+            border-radius: 3px;
+            transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* On Checked Active Transitions */
+        input:checked + .native-track {
+            background-color: rgba(139, 92, 246, 0.15);
+            border-color: var(--neon-purple);
+        }
+
+        input:checked + .native-track::before {
+            transform: translateX(20px);
+            background-color: var(--neon-purple);
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        /* --- JetBrains Mono System Terminal Status Line --- */
+        .system-terminal-box {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0b0d16;
+            padding: 12px 14px;
+            border-radius: var(--radius-widgets);
+            border: 1px solid var(--xml-stroke-unselected);
+        }
+        .terminal-string-output { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-inactive); }
+        .terminal-percentage-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--icon-active); font-weight: 700; }
+
+        /* --- Action Controls Section --- */
+        .button-layout-box {
+            display: flex;
+            gap: 12px;
+        }
+
+        .android-core-btn {
+            flex: 1;
+            padding: 13px;
+            border-radius: var(--radius-widgets);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-xml-abort {
+            background: transparent;
+            border: 1px solid var(--xml-stroke-unselected);
+            color: var(--text-inactive);
+        }
+        .btn-xml-abort:hover {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .btn-xml-commit {
+            background: linear-gradient(135deg, var(--icon-active), var(--neon-purple));
+            border: none;
+            color: #0b0d19;
+        }
+        .btn-xml-commit:hover {
+            box-shadow: 0 0 18px rgba(0, 242, 254, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="blueprint-grid"></div>
+        <div class="mask-container" id="androidLayoutContainer">
+        
+        <div class="native-xml-frame">
+            
+            <div class="header-layout-row">
+                <div class="sharp-icon-container">
+                    <i data-lucide="satellite" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="header-text-group">
+                    <h3 class="header-main-title">Welcome Satellite Dialog</h3>
+                    <span class="dev-badge-animated">Developer Md. Murad Hasan</span>
+                </div>
+            </div>
+
+            <div class="xml-section-headline">Network Infrastructure Grid</div>
+            <div class="grid-infrastructure">
+                <div class="grid-component-cell" onclick="execCellSelect(this, 'Link Telemetry: Eco-Band Secure Loop Connected')">
+                    <i data-lucide="cloud-lightning" style="width: 18px; height: 18px;"></i>
+                    <span>Eco Net</span>
+                </div>
+                <div class="grid-component-cell active" onclick="execCellSelect(this, 'Link Telemetry: Standard Grid Base Verified')">
+                    <i data-lucide="cpu" style="width: 18px; height: 18px;"></i>
+                    <span>Standard</span>
+                </div>
+                <div class="grid-component-cell" onclick="execCellSelect(this, 'Link Telemetry: Hyper-Speed Pipeline Linked')">
+                    <i data-lucide="zap" style="width: 18px; height: 18px;"></i>
+                    <span>Hyper</span>
+                </div>
+            </div>
+
+            <div class="xml-section-headline">Core Config Nodes</div>
+            <div class="parameter-bounding-box">
+                <div class="switch-flex-row">
+                    <span class="switch-label-string">Quantum Tunneling Proxy</span>
+                    <label class="native-toggle-wrap">
+                        <input type="checkbox" id="quantumToggle" checked>
+                        <span class="native-track"></span>
+                    </label>
+                </div>
+                <div class="switch-flex-row">
+                    <span class="switch-label-string">Satellite Signal Overdrive</span>
+                    <label class="native-toggle-wrap">
+                        <input type="checkbox" id="overdriveToggle">
+                        <span class="native-track"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="system-terminal-box">
+                <span class="terminal-string-output" id="terminalOutputConsole">Pipeline standby for broadcast initialization...</span>
+                <span class="terminal-percentage-tag" id="terminalOutputPercentage">0%</span>
+            </div>
+
+            <div class="button-layout-box">
+                <button class="android-core-btn btn-xml-abort" onclick="dismissXmlOverlay()">Dismiss</button>
+                <button class="android-core-btn btn-xml-commit" id="xmlIgniteActionBtn" onclick="igniteXmlEngineSequence()">
+                    <span>Ignite</span> <i data-lucide="terminal" style="width: 14px; height: 14px;"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script {cite: 1}>
+        // Process Vector Lucide Icons Engine Render Initialization
+        lucide.createIcons();
+
+        // High Visibility Grid Cell Toggle Selection Controller
+        function execCellSelect(clickedCell, traceLogString) {
+            const allCells = document.querySelectorAll('.grid-component-cell');
+            allCells.forEach(cell => cell.classList.remove('active'));
+            
+            clickedCell.classList.add('active');
+            document.getElementById('terminalOutputConsole').innerText = traceLogString;
+        }
+
+        // Native Fast Clear View Dismiss Animation 
+        function dismissXmlOverlay() {
+            const containerObject = document.getElementById('androidLayoutContainer');
+            containerObject.style.transition = 'opacity 0.2s cubic-bezier(0.4, 0, 1, 1)';
+            containerObject.style.opacity = '0';
+            setTimeout(() => {
+                containerObject.style.display = 'none';
+            }, 200);
+        }
+
+        // Ignite Progress Telemetry Engine Loop Sequence Action
+        function igniteXmlEngineSequence() {
+            document.getElementById('xmlIgniteActionBtn').disabled = true;
+            
+            const textConsole = document.getElementById('terminalOutputConsole');
+            const percentConsole = document.getElementById('terminalOutputPercentage');
+            
+            const stepsMatrix = [
+                { percent: 30, log: "allocating satellite uplink tokens..." },
+                { percent: 70, log: "injecting quantum pipeline node hashes..." },
+                { percent: 100, log: "nexus infrastructure deployed!" }
+            ];
+
+            let loopIndex = 0;
+            const coreEngineTimer = setInterval(() => {
+                if(loopIndex < stepsMatrix.length) {
+                    const currentStepData = stepsMatrix[loopIndex];
+                    percentConsole.innerText = `${currentStepData.percent}%`;
+                    textConsole.innerText = currentStepData.log;
+                    
+                    if(currentStepData.percent === 100) {
+                        clearInterval(coreEngineTimer);
+                        setTimeout(() => {
+                            dismissXmlOverlay();
+                        }, 500);
+                    }
+                    loopIndex++;
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>
