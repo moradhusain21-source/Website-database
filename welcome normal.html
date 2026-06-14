@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<style>
+    /* ওভারলে স্টাইল */
+    .overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 9999;
+    }
+
+    /* মূল ডায়লগ বক্স - গ্লোয়িং বর্ডার সহ */
+    .welcome-dialog {
+        width: 320px; background: #111; padding: 25px;
+        border-radius: 20px; text-align: center; color: #fff;
+        position: relative;
+        border: 2px solid transparent;
+        /* গ্লোয়িং বর্ডার এনিমেশন */
+        background-clip: padding-box;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(255, 0, 255, 0.5);
+        animation: slideIn 0.8s ease-out, borderGlow 3s infinite alternate;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-100px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes borderGlow {
+        from { box-shadow: 0 0 10px #ff00ff; }
+        to { box-shadow: 0 0 30px #00ffff; }
+    }
+
+    /* ক্লোজ বাটন */
+    .close-btn {
+        position: absolute; top: 10px; right: 10px;
+        background: #ff0044; border: none; color: white;
+        width: 30px; height: 30px; border-radius: 50%;
+        font-weight: bold; cursor: pointer;
+        transition: transform 0.3s;
+    }
+    .close-btn:hover { transform: rotate(90deg) scale(1.2); }
+
+    /* লোগো */
+    .logo {
+        width: 80px; height: 80px; margin-bottom: 15px;
+        animation: rotateIcon 10s linear infinite;
+    }
+    @keyframes rotateIcon { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* 3D টেলিগ্রাম বাটন */
+    .telegram-btn {
+        width: 100%; padding: 15px; margin-top: 20px;
+        background: #0088cc; border: none; border-radius: 12px;
+        color: white; font-size: 18px; font-weight: bold;
+        box-shadow: 0 8px 0 #005588;
+        cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    /* বাটন ক্লিক এনিমেশন */
+    .telegram-btn:active {
+        transform: translateY(8px);
+        box-shadow: 0 0 0 #005588;
+    }
+
+    /* লেখা এনিমেশন */
+    .text-flow {
+        background: linear-gradient(to right, #00ffff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: pulseText 2s infinite;
+    }
+    @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+</style>
+</head>
+<body>
+
+<div class="overlay" id="dialog">
+    <div class="welcome-dialog">
+        <!-- ক্লোজ বাটন -->
+        <button class="close-btn" onclick="document.getElementById('dialog').style.display='none'">X</button>
+        
+        <!-- লোগো -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" class="logo">
+        
+        <!-- শিরোনাম -->
+        <h2 class="text-flow">স্বাগতম বন্ধু!</h2>
+        <p>আমাদের অ্যাপে আপনাকে স্বাগতম। আরও আপডেটের জন্য আমাদের টেলিগ্রামে যুক্ত থাকুন।</p>
+        
+        <!-- 3D বাটন -->
+        <button class="telegram-btn">টেলিগ্রামে যুক্ত হোন</button>
+    </div>
+</div>
+
+</body>
+</html>
